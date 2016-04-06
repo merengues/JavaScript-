@@ -77,7 +77,7 @@ var
 
 	// Support: Android<4.1, IE<9
 	// Make sure we trim BOM and NBSP
-	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
+	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,	//删除字符串两侧空格，同String.property.trim()
 
 	// Matches dashed string for camelizing
 	rmsPrefix = /^-ms-/,
@@ -91,23 +91,23 @@ var
 jQuery.fn = jQuery.prototype = {
 
 	// The current version of jQuery being used
-	jquery: version,
+	jquery: version,	//版本"1.12.2"
 
-	constructor: jQuery,
+	constructor: jQuery,	//构造函数为jQuery
 
 	// Start with an empty selector
-	selector: "",
+	selector: "",	//选择器为""
 
 	// The default length of a jQuery object is 0
-	length: 0,
+	length: 0,	//默认长度为0
 
 	toArray: function() {
-		return slice.call( this );
+		return slice.call( this );	//使用Array.property.slice()c创建一个toArray方法，this指向jQuery
 	},
 
 	// Get the Nth element in the matched element set OR
 	// Get the whole matched element set as a clean array
-	get: function( num ) {
+	get: function( num ) {	
 		return num != null ?
 
 			// Return just the one element from the set
