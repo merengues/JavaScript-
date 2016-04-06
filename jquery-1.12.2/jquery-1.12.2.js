@@ -119,21 +119,21 @@ jQuery.fn = jQuery.prototype = {
 
 	// Take an array of elements and push it onto the stack  取得一个数组的元素，将他入栈
 	// (returning the new matched element set)  返回新的匹配的元素集合
-	pushStack: function( elems ) {				// 
-
+	pushStack: function( elems ) {				
+		
 		// Build a new jQuery matched element set  新建一个匹配的元素集合
 		var ret = jQuery.merge( this.constructor(), elems );   //merge函数跳转到433行查看源码，原生JavaScript没有这个函数
-
-		// Add the old object onto the stack (as a reference)
-		ret.prevObject = this;
-		ret.context = this.context;
+																//this.constructor() --> []     为什么不直接新建一个空数组？？
+		// Add the old object onto the stack (as a reference)   把旧对象入栈，作为一个参考
+		ret.prevObject = this;				//prevObject 是什么?
+		ret.context = this.context;			//context 是什么？
 
 		// Return the newly-formed element set
 		return ret;
 	},
 
-	// Execute a callback for every element in the matched set.
-	each: function( callback ) {
+	// Execute a callback for every element in the matched set.  为每个匹配的元素执行回调函数
+	each: function( callback ) {			//源码查看364行
 		return jQuery.each( this, callback );
 	},
 
@@ -268,7 +268,7 @@ jQuery.extend( {
 
 	isWindow: function( obj ) {
 		/* jshint eqeqeq: false */
-		return obj != null && obj == obj.window;
+		return obj != null && obj == obj.window;	//obj不为空并且有window属性，window.window指向window本身
 	},
 
 	isNumeric: function( obj ) {
@@ -330,7 +330,7 @@ jQuery.extend( {
 
 	type: function( obj ) {
 		if ( obj == null ) {
-			return obj + "";
+			return obj + "";	//obj为null或者undefined时返回对应的字符串;  typeof null 原生js返回的是"object"
 		}
 		return typeof obj === "object" || typeof obj === "function" ?
 			class2type[ toString.call( obj ) ] || "object" :
@@ -364,7 +364,7 @@ jQuery.extend( {
 	each: function( obj, callback ) {
 		var length, i = 0;
 
-		if ( isArrayLike( obj ) ) {
+		if ( isArrayLike( obj ) ) {		//isArrayLine --> 563行
 			length = obj.length;
 			for ( ; i < length; i++ ) {
 				if ( callback.call( obj[ i ], i, obj[ i ] ) === false ) {
@@ -435,21 +435,21 @@ jQuery.extend( {
 			j = 0,
 			i = first.length;
 
-		while ( j < len ) {
-			first[ i++ ] = second[ j++ ];
+		while ( j < len ) {		//当传入参数的个数小于second的长度，同时兼做判断second为空时
+			first[ i++ ] = second[ j++ ];  	
 		}
 
 		// Support: IE<9
-		// Workaround casting of .length to NaN on otherwise arraylike objects (e.g., NodeLists)
-		if ( len !== len ) {
-			while ( second[ j ] !== undefined ) {
+		// Workaround casting of .length to NaN on otherwise arraylike objects (e.g., NodeLists)  //nodelists之类的数组
+		if ( len !== len ) {		//如何理解这个判断？
+			while ( second[ j ] !== undefined ) {	//即second[second.length] !== undefined 
 				first[ i++ ] = second[ j++ ];
 			}
 		}
 
-		first.length = i;
+		first.length = i;	//重置合并后的数组的长度
 
-		return first;
+		return first;	//返回数组
 	},
 
 	grep: function( elems, callback, invert ) {
@@ -567,9 +567,9 @@ function isArrayLike( obj ) {
 	// hasOwn isn't used here due to false negatives
 	// regarding Nodelist length in IE
 	var length = !!obj && "length" in obj && obj.length,
-		type = jQuery.type( obj );
+		type = jQuery.type( obj );		// type --> 331行
 
-	if ( type === "function" || jQuery.isWindow( obj ) ) {
+	if ( type === "function" || jQuery.isWindow( obj ) ) {    //isWindow --> 269行
 		return false;
 	}
 
