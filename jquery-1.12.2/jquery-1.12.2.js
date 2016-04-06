@@ -101,14 +101,14 @@ jQuery.fn = jQuery.prototype = {
 	// The default length of a jQuery object is 0
 	length: 0,	//默认长度为0
 
-	toArray: function() {
-		return slice.call( this );	//使用Array.property.slice()c创建一个toArray方法，this指向jQuery
+	toArray: function() {			//使用Array.property.slice()创建一个toArray方法，this指向jQuery创建的数组
+		return slice.call( this );	
 	},
 
 	// Get the Nth element in the matched element set OR
 	// Get the whole matched element set as a clean array
-	get: function( num ) {	
-		return num != null ?
+	get: function( num ) {			//num为数字，若为正整数，返回数组的第N个元素，Array[0]为第一个数；若为负数，返回倒数第N个元素；若为null、undefined或者不传入参数，则返回数组
+		return num != null ?		//传入""，返回undefined -------->为什么( "" != null )的结果为true
 
 			// Return just the one element from the set
 			( num < 0 ? this[ num + this.length ] : this[ num ] ) :
@@ -117,12 +117,12 @@ jQuery.fn = jQuery.prototype = {
 			slice.call( this );
 	},
 
-	// Take an array of elements and push it onto the stack
-	// (returning the new matched element set)
-	pushStack: function( elems ) {
+	// Take an array of elements and push it onto the stack  取得一个数组的元素，将他入栈
+	// (returning the new matched element set)  返回新的匹配的元素集合
+	pushStack: function( elems ) {				// 
 
-		// Build a new jQuery matched element set
-		var ret = jQuery.merge( this.constructor(), elems );
+		// Build a new jQuery matched element set  新建一个匹配的元素集合
+		var ret = jQuery.merge( this.constructor(), elems );   //merge函数跳转到433行查看源码，原生JavaScript没有这个函数
 
 		// Add the old object onto the stack (as a reference)
 		ret.prevObject = this;
@@ -430,8 +430,8 @@ jQuery.extend( {
 		return -1;
 	},
 
-	merge: function( first, second ) {
-		var len = +second.length,
+	merge: function( first, second ) {		
+		var len = +second.length,		//	+号起什么作用？
 			j = 0,
 			i = first.length;
 
