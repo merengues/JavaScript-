@@ -88,7 +88,7 @@ var
 		return letter.toUpperCase();
 	};
 
-jQuery.fn = jQuery.prototype = {
+jQuery.fn = jQuery.prototype = {            //jQuery原型属性及方法定义，至 173 行结束
 
 	// The current version of jQuery being used
 	jquery: version,	//版本"1.12.2"
@@ -122,8 +122,8 @@ jQuery.fn = jQuery.prototype = {
 	pushStack: function( elems ) {				
 		
 		// Build a new jQuery matched element set  新建一个匹配的元素集合
-		var ret = jQuery.merge( this.constructor(), elems );   //merge函数跳转到433行查看源码，原生JavaScript没有这个函数
-																//this.constructor() --> []     为什么不直接新建一个空数组？？
+		var ret = jQuery.merge( this.constructor(), elems );   //merge函数跳转到433行查看源码，原生JavaScript没有这个函数 //this.constructor() --> []     为什么不直接新建一个空数组？？？为了始终保持保持一个空数组？？
+        
 		// Add the old object onto the stack (as a reference)   把旧对象入栈，作为一个参考
 		ret.prevObject = this;				//prevObject 是什么?
 		ret.context = this.context;			//context 是什么？
@@ -132,38 +132,38 @@ jQuery.fn = jQuery.prototype = {
 		return ret;
 	},
 
-	// Execute a callback for every element in the matched set.  为每个匹配的元素执行回调函数
-	each: function( callback ) {			//源码查看364行
+	// Execute a callback for every element in the matched set.  为每个匹配的元素添加回调函数
+	each: function( callback ) {			//jQuery.each()源码 ---> 364行
 		return jQuery.each( this, callback );
 	},
 
-	map: function( callback ) {
-		return this.pushStack( jQuery.map( this, function( elem, i ) {
+	map: function( callback ) {                                         
+		return this.pushStack( jQuery.map( this, function( elem, i ) {      //jQuery.map源码 --> 475行
 			return callback.call( elem, i, elem );
 		} ) );
 	},
 
-	slice: function() {
-		return this.pushStack( slice.apply( this, arguments ) );
+	slice: function() {     
+		return this.pushStack( slice.apply( this, arguments ) );        //通过调用pushStack返回新数组，对原始数组不产生影响
 	},
 
 	first: function() {
-		return this.eq( 0 );
+		return this.eq( 0 );    //jQuery.eq() ---> 158行     返回jQuery组第一个数
 	},
 
-	last: function() {
+	last: function() {          //返回jQuery数组最后一个数
 		return this.eq( -1 );
 	},
 
-	eq: function( i ) {
+	eq: function( i ) {     //Reduce the set of matched elements to the one at the specified index.    从被匹配的元素集合中找出最符合索引要求的那个元素
 		var len = this.length,
-			j = +i + ( i < 0 ? len : 0 );
+			j = +i + ( i < 0 ? len : 0 );       // +号起什么作用？？不是强制i为正数的作用 ------------// i<0 -> j=len+i; i>0 -> j = i
 		return this.pushStack( j >= 0 && j < len ? [ this[ j ] ] : [] );
 	},
 
-	end: function() {
-		return this.prevObject || this.constructor();
-	},
+	end: function() {                                       // *****(翻译不准确)，返回匹配元素集合的上一个状态
+		return this.prevObject || this.constructor();       //End the most recent filtering operation in the current chain and return the set of matched elements to its previous state.
+	},                                                      // preObject ---> 上一个状态的数组 ???    没有就返回空数组
 
 	// For internal use only.
 	// Behaves like an Array's method, not like a jQuery method.
@@ -172,15 +172,15 @@ jQuery.fn = jQuery.prototype = {
 	splice: deletedIds.splice
 };
 
-jQuery.extend = jQuery.fn.extend = function() {
+jQuery.extend = jQuery.fn.extend = function() {         //jQuery原型上定义扩展函数，至 242行结束
 	var src, copyIsArray, copy, name, options, clone,
 		target = arguments[ 0 ] || {},
 		i = 1,
 		length = arguments.length,
 		deep = false;
 
-	// Handle a deep copy situation
-	if ( typeof target === "boolean" ) {
+	// Handle a deep copy situation     处理深复制情况
+	if ( typeof target === "boolean" ) {    //第一个参数参数为boolean型，则把Object定义为第二个传入的对象
 		deep = target;
 
 		// skip the boolean and the target
@@ -188,15 +188,15 @@ jQuery.extend = jQuery.fn.extend = function() {
 		i++;
 	}
 
-	// Handle case when target is a string or something (possible in deep copy)
-	if ( typeof target !== "object" && !jQuery.isFunction( target ) ) {
+	// Handle case when target is a string or something (possible in deep copy)     
+	if ( typeof target !== "object" && !jQuery.isFunction( target ) ) {     //target不是对象也不是函数    isFunction ---> 源码 261 行
 		target = {};
 	}
 
-	// extend jQuery itself if only one argument is passed
+	// extend jQuery itself if only one argument is passed  如果只传入一个参数，则扩展jQuery本身
 	if ( i === length ) {
 		target = this;
-		i--;
+		i--;        // i-- 起什么作用？  当值传入1个参数时，i退回到0
 	}
 
 	for ( ; i < length; i++ ) {
@@ -215,8 +215,8 @@ jQuery.extend = jQuery.fn.extend = function() {
 				}
 
 				// Recurse if we're merging plain objects or arrays
-				if ( deep && copy && ( jQuery.isPlainObject( copy ) ||
-					( copyIsArray = jQuery.isArray( copy ) ) ) ) {
+				if ( deep && copy && ( jQuery.isPlainObject( copy ) ||              //isPlainObject ---> 源码见 292 行
+					( copyIsArray = jQuery.isArray( copy ) ) ) ) {                  //jQuery是数组或对象
 
 					if ( copyIsArray ) {
 						copyIsArray = false;
@@ -241,7 +241,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 	return target;
 };
 
-jQuery.extend( {
+jQuery.extend( {            //  至 545 行结束
 
 	// Unique for each copy of jQuery on the page
 	expando: "jQuery" + ( version + Math.random() ).replace( /\D/g, "" ),
@@ -289,21 +289,21 @@ jQuery.extend( {
 		return true;
 	},
 
-	isPlainObject: function( obj ) {
+	isPlainObject: function( obj ) {    //Check to see if an object is a plain object (created using “{}” or “new Object”).  检查对象是不是简单对象
 		var key;
 
 		// Must be an Object.
 		// Because of IE, we also have to check the presence of the constructor property.
 		// Make sure that DOM nodes and window objects don't pass through, as well
-		if ( !obj || jQuery.type( obj ) !== "object" || obj.nodeType || jQuery.isWindow( obj ) ) {
+		if ( !obj || jQuery.type( obj ) !== "object" || obj.nodeType || jQuery.isWindow( obj ) ) {  //如果不是对象、obj类型不是Object、obj是节点或者window
 			return false;
 		}
 
 		try {
 
-			// Not own constructor property must be Object
-			if ( obj.constructor &&
-				!hasOwn.call( obj, "constructor" ) &&
+			// Not own constructor property must be Object  构造函数属性不必是object
+			if ( obj.constructor &&                             //如果obj有构造函数
+				!hasOwn.call( obj, "constructor" ) &&           //hasOwn ---> 源码 61 行
 				!hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
 				return false;
 			}
@@ -361,13 +361,13 @@ jQuery.extend( {
 		return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
 	},
 
-	each: function( obj, callback ) {
+	each: function( obj, callback ) {       //为每个传入的参数添加回调函数
 		var length, i = 0;
 
-		if ( isArrayLike( obj ) ) {		//isArrayLine --> 563行
-			length = obj.length;
+		if ( isArrayLike( obj ) ) {		//当obj为数组时；   isArrayLine --> 563行
+			length = obj.length;        
 			for ( ; i < length; i++ ) {
-				if ( callback.call( obj[ i ], i, obj[ i ] ) === false ) {
+				if ( callback.call( obj[ i ], i, obj[ i ] ) === false ) {       //call 与 apply的区别
 					break;
 				}
 			}
@@ -471,13 +471,13 @@ jQuery.extend( {
 		return matches;
 	},
 
-	// arg is for internal usage only
-	map: function( elems, callback, arg ) {
+	// arg is for internal usage only  参数仅供内部使用
+	map: function( elems, callback, arg ) {         //Translate all items in an array or object to new array of items.   把数组或对象的的每个元素转换成新数组的元素
 		var length, value,
 			i = 0,
 			ret = [];
 
-		// Go through the array, translating each of the items to their new values
+		// Go through the array, translating each of the items to their new values  遍历数组，把数组的每个元素通过回调函数转换成新值
 		if ( isArrayLike( elems ) ) {
 			length = elems.length;
 			for ( ; i < length; i++ ) {
@@ -488,7 +488,7 @@ jQuery.extend( {
 				}
 			}
 
-		// Go through every key on the object,
+		// Go through every key on the object,  遍历对象上的每个关键字
 		} else {
 			for ( i in elems ) {
 				value = callback( elems[ i ], i, arg );
